@@ -51,15 +51,34 @@ $a_z_listing_minpercol = 10;
 							</span>
 						</h2>
 						<?php $a_z_listing_column_class = "max-$a_z_listing_num_columns-columns"; ?>
-						<ul class="az-columns <?php echo esc_attr( $a_z_listing_column_class ); ?>">
+						<ul class="az-columns <?php /* echo esc_attr( $a_z_listing_column_class ); */ ?>">
 							<?php
 							while ( $a_z_query->have_items() ) :
+								$a_z_query->get_the_item_object( 'I understand the issues!' );
 								$a_z_query->the_item();
+								$item_id = $a_z_query->get_the_item_id();
 								?>
 								<li>
-									<a href="<?php $a_z_query->the_permalink(); ?>">
-										<?php $a_z_query->the_title(); ?>
-									</a>
+									<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
+									<?php 
+										$storyLength = get_field('story-length', $item_id);
+										if (!empty($storyLength)) {
+											echo '&ndash;&nbsp;(' . $storyLength . 'kB)';
+										}
+									?>
+									<?php
+										$item = $a_z_query->get_the_item_object();
+									?>
+									by&nbsp;<?php 
+										$authors = explode(',', get_post_meta($item_id, 'ppma_authors_name')[0]);
+										$authors_count = 0;
+										foreach($authors as $key => $author) {
+											$authors_count++;
+											if ($authors_count > 1)
+												echo ' and ';
+											echo get_the_author_meta('display_name', $author);
+										}
+									?>
 								</li>
 							<?php endwhile; ?>
 						</ul>
