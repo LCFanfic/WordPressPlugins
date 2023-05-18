@@ -54,8 +54,8 @@ $a_z_listing_minpercol = 10;
 						<ul class="az-columns <?php /* echo esc_attr( $a_z_listing_column_class ); */ ?>">
 							<?php
 							while ( $a_z_query->have_items() ) :
-								$a_z_query->get_the_item_object( 'I understand the issues!' );
 								$a_z_query->the_item();
+								$a_z_query->get_the_item_object( 'I understand the issues!' );
 								$item_id = $a_z_query->get_the_item_id();
 								?>
 								<li>
