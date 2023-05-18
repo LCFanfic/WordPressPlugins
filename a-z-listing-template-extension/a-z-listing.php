@@ -60,26 +60,41 @@ $a_z_listing_minpercol = 10;
 								$item_id = $a_z_query->get_the_item_id();
 								?>
 								<li>
-									<a href="<?php $a_z_query->the_permalink(); ?>"><?php echo get_the_title($item_id); ?></a>
 									<?php 
-										$storyLength = get_field('story-length', $item_id);
-										if (!empty($storyLength)) {
-											echo '&ndash;&nbsp;(' . $storyLength . 'kB)';
+										$parentID = wp_get_post_parent_id($item_id);
+										$nfanficID = 13;
+										$removedStoriesID = 2638;
+										$authorID = 93;
+										$removedAuthorsID = 2726;
+										$isStory = $parentID == $nfanficID || $parentID == $removedStoriesID;
+										$isAuthor = $parentID == $authorID || $parentID == $removedAuthorsID;
+										if ($isStory) {
+											echo '<a href="' . $a_z_query->get_the_permalink() . '">' . get_the_title($item_id) . '</a>';
+											$storyLength = get_field('story-length', $item_id);
+											if (!empty($storyLength)) {
+												echo ' &ndash;&nbsp;(' . $storyLength . 'kB)';
+											}
+											$authors = explode(',', get_post_meta($item_id, 'ppma_authors_name')[0]);
+											$authors_index = 0;
+											foreach($authors as $key => $author) {
+												echo ($authors_index == 0 ? ' by ' : ' and ') . $author;
+												$authors_index++;
+											}
+											$summary = get_field('story-summary', $item_id);
+											if (!empty($summary))
+												echo '<br/>' . htmlentities($summary);
 										}
-									?>
-									by
-									<?php
-										$authors = explode(',', get_post_meta($item_id, 'ppma_authors_name')[0]);
-										$authors_count = 0;
-										foreach($authors as $key => $author) {
-											$authors_count++;
-											if ($authors_count > 1)
-												echo ' and ';
-											echo $author;
+										else if($isAuthor) {
+											$title = get_the_title($item_id);
+											$nameParts = explode(',', $title);
+											if (count($nameParts) == 2)
+												$title = $nameParts[1] . ' ' . $nameParts[0];
+											echo '<a href="' . $a_z_query->get_the_permalink() . '">' . $title . '</a>';
 										}
-										$summary = get_field('story-summary', $item_id);
-										if (!empty($summary))
-											echo '<br/>' . htmlentities($summary);
+										else
+										{
+											echo '<a href="' . $a_z_query->get_the_permalink() . '">' . get_the_title($item_id) . '</a>';
+										}
 									?>
 								</li>
 							<?php endwhile; ?>
