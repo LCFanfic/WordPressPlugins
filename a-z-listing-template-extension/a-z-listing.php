@@ -53,6 +53,7 @@ $a_z_listing_minpercol = 10;
 						<?php $a_z_listing_column_class = "max-$a_z_listing_num_columns-columns"; ?>
 						<ul class="az-columns <?php /* echo esc_attr( $a_z_listing_column_class ); */ ?>">
 							<?php
+							//var_dump(get_class_methods($p));
 							while ( $a_z_query->have_items() ) :
 								$a_z_query->the_item();
 								$a_z_query->get_the_item_object( 'I understand the issues!' );
