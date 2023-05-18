@@ -77,6 +77,9 @@ $a_z_listing_minpercol = 10;
 												echo ' and ';
 											echo $author;
 										}
+										$summary = get_field('story-summary', $item_id);
+										if (!empty($summary))
+											echo '<br/>' . htmlentities($summary);
 									?>
 								</li>
 							<?php endwhile; ?>
